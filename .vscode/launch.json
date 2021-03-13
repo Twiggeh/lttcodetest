@@ -1,0 +1,100 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch Chrome",
+			"outFiles": ["./client/public/js/*.js", "!**/node_modules/**"],
+			"request": "launch",
+			"type": "pwa-chrome",
+			"url": "http://localhost:5000",
+			"webRoot": "${workspaceFolder}/client",
+			"postDebugTask": "Linux kill webpack",
+			"sourceMaps": true
+		},
+		{
+			"name": "Development Backend",
+			"cwd": "${workspaceFolder}/server",
+			"outFiles": ["${workspaceFolder}/server/dist/**/*.js", "!**/node_modules/**"],
+			"restart": true,
+			"request": "launch",
+			"type": "pwa-node",
+			"runtimeExecutable": "nodemon",
+			"runtimeArgs": ["--inspect-brk", "./dist/app.js"]
+		},
+		{
+			"name": "TSC Watcher Client",
+			"command": "tsc --noEmit -w",
+			"cwd": "${workspaceFolder}/client",
+			"request": "launch",
+			"type": "node-terminal",
+			"internalConsoleOptions": "neverOpen"
+		},
+		{
+			"name": "TSC Compiler Server",
+			"command": "yarn debug",
+			"cwd": "${workspaceFolder}/server",
+			"request": "launch",
+			"type": "node-terminal"
+		},
+		{
+			"windows": {
+				"command": "runas /noprofile /user:Administrator node ${workspaceFolder}/scripts/setup.js"
+			},
+			"linux": {
+				"command": "sudo node ${workspaceFolder}/scripts/setup.js"
+			},
+			"command": "sudo node ${workspaceFolder}/scripts/setup.js",
+			"name": "Start Setup",
+			"request": "launch",
+			"type": "node-terminal",
+			"skipFiles": ["<node_internals>/**"]
+		},
+		{
+			"name": "Build Scripts",
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
+			"program": "${workspaceFolder}/scripts/buildScripts.js",
+			"cwd": "${workspaceFolder}",
+			"request": "launch",
+			"restart": true,
+			"runtimeExecutable": "node",
+			"skipFiles": ["<node_internals>/**"],
+			"runtimeArgs": ["--inspect-brk"],
+			"type": "pwa-node"
+		},
+		{
+			"name": "Start Webpack",
+			"console": "integratedTerminal",
+			"program": "${workspaceFolder}/client/scripts/debug.js",
+			"request": "launch",
+			"runtimeExecutable": "node",
+			"skipFiles": ["<node_internals>/**"],
+			"type": "pwa-node"
+		},
+		{
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
+			"name": "testing on breh",
+			"program": "${workspaceFolder}/breh.mjs",
+			"request": "launch",
+			"restart": true,
+			"runtimeExecutable": "nodemon",
+			"skipFiles": ["<node_internals>/**"],
+			"type": "pwa-node"
+		}
+	],
+	"compounds": [
+		{
+			"name": "start chrome debug session",
+			"configurations": [
+				"Start Webpack",
+				"Launch Chrome",
+				"TSC Watcher Client",
+				"TSC Compiler Server",
+				"Development Backend"
+			],
+			//	"preLaunchTask": "start Webpack",
+			"stopAll": true
+		}
+	]
+}

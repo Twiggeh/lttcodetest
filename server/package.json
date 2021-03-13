@@ -1,0 +1,50 @@
+{
+	"name": "shopify-app-node",
+	"version": "1.0.0",
+	"description": "Shopify's node app for CLI tool",
+	"type": "module",
+	"scripts": {
+		"debug": "node ./scripts/debug.js",
+		"start": "node ./scripts/build.js",
+		"gql:codegen": "graphql-codegen --config ./config/gqlgen.yml"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Shopify/shopify-app-node.git"
+	},
+	"author": "Shopify Inc.",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/shopify/shopify-app-node/issues"
+	},
+	"dependencies": {
+		"@babel/core": "7.12.10",
+		"@babel/polyfill": "^7.6.0",
+		"@babel/preset-env": "^7.12.11",
+		"@babel/register": "^7.12.10",
+		"@shopify/koa-shopify-auth": "^4.0.2",
+		"@types/koa": "^2.13.1",
+		"@types/koa-router": "^7.4.1",
+		"@types/mime": "^2.0.3",
+		"@types/node": "^14.14.34",
+		"cross-env": "^7.0.3",
+		"dotenv": "^8.2.0",
+		"graphql": "^14.5.8",
+		"isomorphic-fetch": "^3.0.0",
+		"koa": "^2.13.1",
+		"koa-router": "^10.0.0",
+		"koa-send": "^5.0.1",
+		"koa-session": "^6.1.0",
+		"mime": "^2.5.2"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.{js,css,json,md}": [
+			"prettier --write"
+		]
+	}
+}
