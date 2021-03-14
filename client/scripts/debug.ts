@@ -7,7 +7,10 @@ import { processParams } from './parseParams.js';
 
 const __dirname = decodeURI(dirname(new URL(import.meta.url).pathname));
 
-const { backendUrl, devPort } = processParams(process.argv, defaultDebugCfg);
+const { backendUrl, devPort, shopifyApiKey } = processParams(
+	process.argv,
+	defaultDebugCfg
+);
 
 let envFileContent = '';
 const addEnvContent = (newContent: string) => void (envFileContent += newContent + '\n');
@@ -17,6 +20,8 @@ addEnvContent('NODE_ENV=development');
 
 // URL
 addEnvContent(`BACKEND_URL="${backendUrl}"`);
+
+addEnvContent(`SHOPIFY_API_KEY="${shopifyApiKey}"`);
 
 // Write env file
 writeFileSync(join(__dirname, '../.env'), envFileContent);

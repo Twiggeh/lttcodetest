@@ -169,6 +169,7 @@ module.exports = {
 		}),
 		new webpack.DefinePlugin({
 			BACKEND_SERVER_URL: JSON.stringify('http://localhost:5050'),
+			SHOPIFY_API_KEY: JSON.stringify(process.env.SHOPIFY_API_KEY),
 		}),
 		new CleanWebpackPlugin(),
 	],
