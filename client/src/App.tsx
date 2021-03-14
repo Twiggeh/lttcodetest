@@ -6,7 +6,7 @@ import { authenticatedFetch } from '@shopify/app-bridge-utils';
 import '@shopify/polaris/dist/styles.css';
 import translations from '@shopify/polaris/locales/en.json';
 
-const App = () => {
+const ShopifyProvider: React.FC = ({ children }) => {
 	const app = useAppBridge();
 
 	const client = new ApolloClient({
@@ -15,27 +15,35 @@ const App = () => {
 			credentials: 'include',
 		},
 	});
+	return <ApolloProvider client={client}>{children}</ApolloProvider>;
+};
+
+const App = () => {
+	const shopOrigin = getCookie('shopOrigin');
+
+	if (!shopOrigin) return <div>Error: No shopOrigin cookie has been set.</div>;
 
 	return (
 		<AppProvider i18n={translations}>
 			<AppBridgeProvider
 				config={{
-					apiKey: API_KEY,
-					shopOrigin: shopOrigin,
+					apiKey: SHOPIFY_API_KEY,
+					shopOrigin,
 					forceRedirect: true,
 				}}>
-				<ApolloProvider client={client}>
+				<ShopifyProvider>
 					<div>hello</div>
-				</ApolloProvider>
+				</ShopifyProvider>
 			</AppBridgeProvider>
 		</AppProvider>
 	);
 };
 
-App.getInitialProps = async ({ ctx }) => {
-	return {
-		shopOrigin: ctx.query.shop,
-	};
+const getCookie = (key: string) => {
+	console.log(document.cookie);
+	console.log(document);
+	const b = document.cookie.match('(^|;)\\s*' + key + '\\s*=\\s*([^;]+)');
+	return b ? b.pop() : undefined;
 };
 
 export default App;
