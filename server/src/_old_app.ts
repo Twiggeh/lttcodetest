@@ -1,5 +1,3 @@
-import 'isomorphic-fetch';
-
 import dotenv from 'dotenv';
 import createShopifyAuthMaster from '@shopify/koa-shopify-auth';
 
@@ -26,13 +24,14 @@ import { dirname, join, resolve } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import { URL } from 'url';
 import mime from 'mime';
-import cors from '@koa/cors';
 import session from 'koa-session';
+
+dotenv.config();
+const port = parseInt(process.env.PORT, 10) || 3000;
+const dev = process.env.NODE_ENV !== 'production';
 
 const __dirname = decodeURI(dirname(new URL(import.meta.url).pathname));
 const PROJECT_ROOT = resolve(__dirname, '../../');
-
-dotenv.config();
 
 const sendFile = (ctx: Context) => {
 	if (ctx.path.includes('sockjs-node')) {
@@ -54,39 +53,35 @@ const sendFile = (ctx: Context) => {
 	console.log(filePath);
 };
 
-const port = 3000;
-
-// initializes the library
 Shopify.Context.initialize({
 	API_KEY: process.env.SHOPIFY_API_KEY,
 	API_SECRET_KEY: process.env.SHOPIFY_API_SECRET,
-	SCOPES: process.env.SHOPIFY_APP_SCOPES.split(','),
-	HOST_NAME: process.env.SHOPIFY_APP_URL.replace(/^https:\/\//, ''),
+	SCOPES: process.env.SCOPES.split(','),
+	HOST_NAME: process.env.HOST.replace(/https:\/\//, ''),
 	API_VERSION: ApiVersion.October20,
 	IS_EMBEDDED_APP: true,
-	// More information at https://github.com/Shopify/shopify-node-api/blob/main/docs/issues.md#notes-on-session-handling
+	// This should be replaced with your preferred storage strategy
 	SESSION_STORAGE: new Shopify.Session.MemorySessionStorage(),
 });
 
 // Storing the currently active shops in memory will force them to re-login when your server restarts. You should
 // persist this object in your app.
-const ACTIVE_SHOPIFY_SHOPS: Record<string, boolean> = {};
+const ACTIVE_SHOPIFY_SHOPS: Record<string, string> = {};
 
 const server = new Koa();
+
+// server.use(session(server));
+
 const router = new Router();
 server.keys = [Shopify.Context.API_SECRET_KEY];
-
-// app.use(cors);
 
 router.get('/', async ctx => {
 	const shop = ctx.query.shop;
 
-	// If this shop hasn't been seen yet, go through OAuth to create a session
-	if (typeof shop === 'string' && ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
+	// This shop hasn't been seen yet, go through OAuth to create a session
+	if (!Array.isArray(shop) && ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
 		ctx.redirect(`/auth?shop=${shop}`);
 	} else {
-		// Load app skeleton. Don't include sensitive information here!
-		//ctx.body = '🎉';
 		sendFile(ctx);
 	}
 });
@@ -100,39 +95,28 @@ router.post('/webhooks', async ctx => {
 	}
 });
 
-router.post(
-	'/graphql',
-	/* verifyRequest({ accessMode: 'offline' }), */ async (ctx, next) => {
-		await Shopify.Utils.graphqlProxy(ctx.req, ctx.res);
-	}
-);
+router.post('/graphql', async (ctx, next) => {
+	await Shopify.Utils.graphqlProxy(ctx.req, ctx.res);
+});
 
-router.get(
-	'(/public/*)',
-	() => {
-		console.log('sending file over public transport');
-	},
-	sendFile
-); // Static content is clear
-// Everything else must have sessions
-router.get(
-	'(.*)',
-	/* verifyRequest({ accessMode: 'offline' }),*/ async ctx => {
-		// Your application code goes here
-		sendFile(ctx);
-	}
-);
+router.get('(/public/*)', sendFile); // Static content is clear
+router.get('(.*)', ctx => {
+	sendFile(ctx);
+}); // Everything else must have sessions
 
-// Sets up shopify auth
 server
 	.use(
 		createShopifyAuth({
-			//	accessMode: 'offline',
+			accessMode: 'offline',
 			async afterAuth(ctx) {
-				const { shop, accessToken } = ctx.state.shopify;
-				ACTIVE_SHOPIFY_SHOPS[shop] = true;
+				console.log('------\n------\nauth done\n------\n------');
 
-				// Your app should handle the APP_UNINSTALLED webhook to make sure merchants go through OAuth if they reinstall it
+				// Access token and shop available in ctx.state.shopify
+				const { shop, accessToken, scope } = ctx.state.shopify;
+				ACTIVE_SHOPIFY_SHOPS[shop] = scope;
+
+				console.log({ ACTIVE_SHOPIFY_SHOPS });
+
 				const response = await Shopify.Webhooks.Registry.register({
 					shop,
 					accessToken,
@@ -142,11 +126,11 @@ server
 						void delete ACTIVE_SHOPIFY_SHOPS[shop],
 				});
 
+				// ctx.cookies.set('shopOrigin', shop, { httpOnly: false });
+
 				if (!response.success) {
 					console.log(`Failed to register APP_UNINSTALLED webhook: ${response.result}`);
 				}
-
-				ctx.cookies.set('shopOrigin', shop, { httpOnly: false });
 
 				// Redirect to app with shop parameter upon auth
 				ctx.redirect(`/?shop=${shop}`);

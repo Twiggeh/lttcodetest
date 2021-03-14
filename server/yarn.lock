@@ -842,6 +842,13 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@koa/cors@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@koa/cors/-/cors-3.1.0.tgz#618bb073438cfdbd3ebd0e648a76e33b84f3a3b2"
+  integrity sha512-7ulRC1da/rBa6kj6P4g2aJfnET3z8Uf3SWu60cjbtxTA5g8lxRdX/Bd2P92EagGwwAhANeNw8T8if99rJliR6Q==
+  dependencies:
+    vary "^1.1.2"
+
 "@shopify/koa-shopify-auth@^4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@shopify/koa-shopify-auth/-/koa-shopify-auth-4.0.2.tgz#048030edf9e2715ed2eb5cecf54af9fa727eccba"
@@ -972,6 +979,14 @@
   dependencies:
     "@types/koa" "*"
 
+"@types/koa-session@^5.10.3":
+  version "5.10.3"
+  resolved "https://registry.yarnpkg.com/@types/koa-session/-/koa-session-5.10.3.tgz#1a59edd138bcc098ca19c7fb21c5e38bcedcb8ad"
+  integrity sha512-68JIQ9enY8KVW1rSFYyepLAkRmR9KWPgS3Qstf+HHHu9TK5GRiwDBHY55eOgkhbVwsFqWszpQYX9feKDuBaQsw==
+  dependencies:
+    "@types/cookies" "*"
+    "@types/koa" "*"
+
 "@types/koa@*", "@types/koa@^2.13.1":
   version "2.13.1"
   resolved "https://registry.yarnpkg.com/@types/koa/-/koa-2.13.1.tgz#e29877a6b5ad3744ab1024f6ec75b8cbf6ec45db"
@@ -985,6 +1000,13 @@
     "@types/keygrip" "*"
     "@types/koa-compose" "*"
     "@types/node" "*"
+
+"@types/koa__cors@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@types/koa__cors/-/koa__cors-3.0.2.tgz#578917ffca964e98f5e9849996ae1eeda7c15704"
+  integrity sha512-gBetQR0DJ9JTG1YQoW33BADHCrDPJGiJUKUUcEPJwW1A2unzpIMhorEpXB6eMaaXTaqHLemcGnq3RmH9XaryRQ==
+  dependencies:
+    "@types/koa" "*"
 
 "@types/mime@^1":
   version "1.3.2"

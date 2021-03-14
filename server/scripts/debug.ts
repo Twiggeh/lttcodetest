@@ -16,7 +16,7 @@ const defaultDebugCfg = {
 	shopifyApiSecret: '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',
 	shop: 'ltttest.myshopify.com',
 	scopes: 'write_products,write_customers,write_draft_orders',
-	host: 'https://7d556a03ca0d.ngrok.io',
+	host: 'https://591acbf17c4c.ngrok.io',
 };
 
 const __dirname = decodeURI(dirname(new URL(import.meta.url).pathname));
@@ -53,11 +53,12 @@ addEnvContent(`SECURE_PORT="${securePort}"`);
 addEnvContent(`DEV_PORT="${devPort}"`);
 addEnvContent(`INSECURE_PORT="${insecurePort}"`);
 
-addEnvContent(`SHOPIFY_API_KEY=${scopes}`);
-addEnvContent(`SHOPIFY_API_SECRET=${shop}`);
-addEnvContent(`SHOP=${shopifyApiSecret}`);
-addEnvContent(`SCOPES=${shopifyApiKey}`);
+addEnvContent(`SHOPIFY_API_KEY=${shopifyApiKey}`);
+addEnvContent(`SHOPIFY_API_SECRET=${shopifyApiSecret}`);
+addEnvContent(`SHOP=${shop}`);
+addEnvContent(`SHOPIFY_APP_SCOPES=${scopes}`);
 addEnvContent(`HOST=${host}`);
+addEnvContent(`SHOPIFY_APP_URL=${host}`);
 
 // TODO : add config for production to not use maps
 
