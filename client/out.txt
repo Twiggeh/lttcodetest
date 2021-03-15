@@ -1,0 +1,15 @@
+yarn run v1.22.10
+$ graphql-codegen --config ./config/gql.yml
+[13:04:30] Parse configuration [started]
+[13:04:30] Parse configuration [completed]
+[13:04:30] Generate outputs [started]
+[13:04:30] Generate src/generated/graphql.tsx [started]
+[13:04:30] Load GraphQL schemas [started]
+[13:04:31] Load GraphQL schemas [completed]
+[13:04:31] Load GraphQL documents [started]
+[13:04:33] Load GraphQL documents [failed]
+[13:04:33] → Cannot read property 'buildError' of undefined
+[13:04:33] Generate src/generated/graphql.tsx [failed]
+[13:04:33] → Cannot read property 'buildError' of undefined
+[13:04:33] Generate outputs [failed]
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

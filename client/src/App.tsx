@@ -1,20 +1,40 @@
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
 import { AppProvider } from '@shopify/polaris';
 import { Provider as AppBridgeProvider, useAppBridge } from '@shopify/app-bridge-react';
 import { authenticatedFetch } from '@shopify/app-bridge-utils';
 import '@shopify/polaris/dist/styles.css';
 import translations from '@shopify/polaris/locales/en.json';
+import Index from './components/Index';
+import { useRef } from 'react';
+import { createUploadLink } from 'apollo-upload-client';
+import {
+	NormalizedCacheObject,
+	ApolloClient,
+	InMemoryCache,
+	ApolloProvider,
+} from '@apollo/client';
 
 const ShopifyProvider: React.FC = ({ children }) => {
-	const app = useAppBridge();
-
-	const client = new ApolloClient({
-		fetch: authenticatedFetch(app),
-		fetchOptions: {
+	const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+		cache: new InMemoryCache(),
+		credentials: 'include',
+		link: createUploadLink({
 			credentials: 'include',
-		},
+			fetch: authenticatedFetch(useAppBridge()),
+			//	uri: 'https://573f6160a7b6.ngrok.io/graphql',
+		}),
 	});
+
+	//const clientRef = useRef(
+	//	new ApolloClient({
+	//		fetch: authenticatedFetch(useAppBridge()),
+	//		fetchOptions: {
+	//			credentials: 'include',
+	//		},
+	//	})
+	//);
+	//
+	//console.log(clientRef);
+
 	return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
 
@@ -32,7 +52,7 @@ const App = () => {
 					forceRedirect: true,
 				}}>
 				<ShopifyProvider>
-					<div>hello</div>
+					<Index></Index>
 				</ShopifyProvider>
 			</AppBridgeProvider>
 		</AppProvider>

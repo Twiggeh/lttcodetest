@@ -47,7 +47,7 @@ module.exports = {
 							],
 							plugins: [
 								'@babel/plugin-transform-runtime',
-								'@prefresh/babel-plugin',
+								//'@prefresh/babel-plugin',
 								'istanbul',
 							],
 							compact: false,
@@ -85,7 +85,7 @@ module.exports = {
 							],
 							plugins: [
 								'@babel/plugin-transform-runtime',
-								'@prefresh/babel-plugin',
+								//'@prefresh/babel-plugin',
 								'istanbul',
 							],
 							compact: true,
@@ -148,9 +148,9 @@ module.exports = {
 	},
 	resolve: {
 		alias: {
-			react: 'preact/compat',
-			'react-dom/test-utils': 'preact/test-utils',
-			'react-dom': 'preact/compat',
+			//react: 'preact/compat',
+			//'react-dom/test-utils': 'preact/test-utils',
+			// 'react-dom': 'preact/compat',
 			//	'react-hot-loader': 'preact/hot-loader',
 			icons: path.resolve(curProcess, './src/assets/icons'),
 			assets: path.resolve(curProcess, './src/assets'),
@@ -161,7 +161,7 @@ module.exports = {
 	},
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),
-		new PreactRefreshPlugin(),
+		// new PreactRefreshPlugin(),
 		new ESLintPlugin(),
 		new HtmlWebpackPlugin({
 			template: path.resolve(curProcess, 'src/index.html'),

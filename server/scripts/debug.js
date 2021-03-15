@@ -15,7 +15,7 @@ const defaultDebugCfg = {
 	shopifyApiSecret: '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',
 	shop: 'ltttest.myshopify.com',
 	scopes: 'write_products,write_customers,write_draft_orders',
-	host: ' https://fef49cd92dda.ngrok.io',
+	host: 'https://573f6160a7b6.ngrok.io',
 };
 const __dirname = decodeURI(dirname(new URL(import.meta.url).pathname));
 const {

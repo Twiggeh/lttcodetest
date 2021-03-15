@@ -146,7 +146,12 @@ server
 					console.log(`Failed to register APP_UNINSTALLED webhook: ${response.result}`);
 				}
 
-				ctx.cookies.set('shopOrigin', shop, { httpOnly: false });
+				ctx.cookies.set('shopOrigin', shop, {
+					httpOnly: false,
+					overwrite: true,
+					sameSite: 'none',
+					secure: true,
+				});
 
 				// Redirect to app with shop parameter upon auth
 				ctx.redirect(`/?shop=${shop}`);

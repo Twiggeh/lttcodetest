@@ -1,6 +1,8 @@
 overwrite: true
-schema: 'http://localhost:5050/graphql'
-documents: '**/*.tsx'
+schema: './introspection.json'
+documents:
+  - '**/*.tsx'
+  - '**/*.ts'
 generates:
   src/generated/graphql.tsx:
     plugins:
@@ -11,5 +13,3 @@ generates:
     config:
       nonOptionalTypename: true
       strict: true
-      scalars:
-        Date: number
